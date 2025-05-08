@@ -29,6 +29,8 @@ interface ModelProps {
     transmission?: number;
     thickness?: number;
     ior?: number;
+    emissiveColor?: string;
+    emissiveIntensity?: number;
   };
 }
 
@@ -49,6 +51,8 @@ function Model({
     transmission: 0.5,
     thickness: 0.5,
     ior: 1.5,
+    emissiveColor: "#ff3000",
+    emissiveIntensity: 0.5,
   },
 }: ModelProps) {
   const { scene } = useGLTF(path);
@@ -63,7 +67,15 @@ function Model({
     // Apply material to all meshes in the scene
     scene.traverse((child) => {
       if (child instanceof THREE.Mesh) {
-        child.material = new THREE.MeshPhysicalMaterial(materialProps);
+        const material = new THREE.MeshPhysicalMaterial({
+          ...materialProps,
+          emissive: materialProps.emissiveColor
+            ? new THREE.Color(materialProps.emissiveColor)
+            : undefined,
+        });
+        child.material = material;
+        child.castShadow = true;
+        child.receiveShadow = true;
       }
     });
   }, [flipVertical, scene, materialProps]);
@@ -82,11 +94,13 @@ function Model({
       scale={scale}
       position={position}
       rotation={rotation}
+      castShadow
+      receiveShadow
     />
   );
 }
 
-interface ModelLoaderProps {
+interface ModelLoaderProps extends Omit<ModelProps, "path"> {
   modelPath?: string;
   backgroundColor?: string;
   showControls?: boolean;
@@ -101,29 +115,13 @@ interface ModelLoaderProps {
     | "city"
     | "park"
     | "lobby";
-  scale?: number;
-  position?: [number, number, number];
-  rotation?: [number, number, number];
-  flipVertical?: boolean;
-  autoRotate?: boolean;
-  autoRotateSpeed?: number;
-  materialProps?: {
-    color?: string;
-    metalness?: number;
-    roughness?: number;
-    clearcoat?: number;
-    clearcoatRoughness?: number;
-    transmission?: number;
-    thickness?: number;
-    ior?: number;
-  };
 }
 
 export function ModelLoader({
   modelPath = "/models/walkman.glb",
   backgroundColor = "transparent",
   showControls = true,
-  environmentPreset = "studio",
+  environmentPreset = "sunset",
   scale = 1,
   position = [0, 0, 0],
   rotation = [0, 0, 0],
@@ -152,14 +150,34 @@ export function ModelLoader({
         style={{ background: backgroundColor }}
         gl={{ antialias: true }}
       >
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
+        {/* Ambient and key light */}
+        <ambientLight intensity={0.2} />
+        <pointLight position={[10, 10, 10]} intensity={0.5} />
+
+        {/* Dramatic backlighting for glow effect */}
         <spotLight
-          position={[-10, 10, -10]}
-          angle={0.5}
-          intensity={1}
-          castShadow
+          position={[-2, 0, -10]}
+          angle={0.4}
+          penumbra={0.8}
+          intensity={3}
+          color="#ff6b00"
+          distance={20}
         />
+        <spotLight
+          position={[2, 0, -10]}
+          angle={0.4}
+          penumbra={0.8}
+          intensity={3}
+          color="#ff3000"
+          distance={20}
+        />
+        <pointLight
+          position={[0, 0, -8]}
+          intensity={2}
+          color="#ff8c00"
+          distance={12}
+        />
+
         <Suspense fallback={null}>
           <PresentationControls
             global

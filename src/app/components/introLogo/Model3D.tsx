@@ -37,6 +37,8 @@ interface Model3DProps {
     transmission?: number;
     thickness?: number;
     ior?: number;
+    emissiveColor?: string;
+    emissiveIntensity?: number;
   };
 }
 
