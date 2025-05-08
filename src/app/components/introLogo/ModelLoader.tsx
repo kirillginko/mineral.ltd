@@ -149,11 +149,13 @@ export function ModelLoader({
         }}
         style={{
           background: backgroundColor,
-          width: "100vw",
-          height: "100vh",
-          position: "fixed",
+          width: "100%",
+          height: "100%",
+          position: "absolute",
           top: 0,
           left: 0,
+          right: 0,
+          bottom: 0,
         }}
         gl={{ antialias: true }}
       >
@@ -193,6 +195,7 @@ export function ModelLoader({
             polar={[-Math.PI / 3, Math.PI / 3]}
             azimuth={[-Math.PI / 1.5, Math.PI / 1.5]}
             speed={1.5}
+            zoom={1}
           >
             <Center>
               <Model
@@ -210,8 +213,8 @@ export function ModelLoader({
           <Environment preset={environmentPreset} />
           {showControls && (
             <OrbitControls
-              enableZoom={true}
-              enablePan={true}
+              enableZoom={false}
+              enablePan={false}
               minPolarAngle={0}
               maxPolarAngle={Math.PI / 1.75}
               makeDefault
