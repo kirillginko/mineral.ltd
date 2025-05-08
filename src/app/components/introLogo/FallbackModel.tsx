@@ -1,13 +1,13 @@
 "use client";
 
-import { Suspense, useRef, useEffect } from "react";
+import React, { Suspense, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
 // Model with proper flipping and centering
 function Model() {
-  const { scene } = useGLTF("/models/walkman2.glb");
+  const { scene } = useGLTF("/models/walkman2.glb"); // Corrected path
   const modelRef = useRef<THREE.Group>(null);
 
   // Set up the model after loading
@@ -39,6 +39,14 @@ function Model() {
           child.geometry.computeVertexNormals();
         }
       });
+
+      // Center the model (important for consistent positioning)
+      const boundingBox = new THREE.Box3().setFromObject(scene);
+      const center = new THREE.Vector3();
+      boundingBox.getCenter(center);
+      scene.position.set(-center.x, -center.y, -center.z); // Center the model
+
+      modelRef.current.add(scene);
     }
   }, [scene]);
 
@@ -50,13 +58,12 @@ function Model() {
   });
 
   return (
-    <group position={[0, 1.5, 0]} rotation={[Math.PI, 0, 0]}>
-      <primitive
-        ref={modelRef}
-        object={scene}
-        scale={0.2}
-        position={[0, 0, 0]}
-      />
+    <group position={[0, 0, 0]} rotation={[Math.PI, 0, 0]}>
+      {" "}
+      {/* Changed position to [0,0,0] */}
+      <group ref={modelRef} scale={0.2} position={[0, 0, 0]}>
+        {/* The scene is added as a child of this group */}
+      </group>
     </group>
   );
 }
@@ -66,7 +73,7 @@ export default function FallbackModel() {
     <div style={{ width: "100%", height: "100vh", background: "black" }}>
       <Canvas
         camera={{
-          position: [0, 0, 5],
+          position: [0, 2, 5], // Adjusted camera position
           fov: 45,
           near: 0.1,
           far: 1000,
@@ -80,7 +87,7 @@ export default function FallbackModel() {
           <OrbitControls
             enableZoom={false}
             autoRotate={false}
-            target={[0, 0, 0]}
+            target={[0, 2, 0]} // Adjusted target
           />
         </Suspense>
       </Canvas>
