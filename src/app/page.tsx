@@ -16,7 +16,10 @@ export default function Home() {
   if (isLoaderVisible) {
     return (
       <div className={styles.loaderScreen}>
-        <div className={styles.modelWrapper}>
+        <div
+          className={styles.modelWrapper}
+          style={{ height: "500px", width: "100%" }}
+        >
           <Model3D
             modelPath="/models/walkman2.glb"
             environmentPreset="sunset"

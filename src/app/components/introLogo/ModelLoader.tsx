@@ -1,16 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import {
-  OrbitControls,
-  useGLTF,
-  Environment,
-  PresentationControls,
-  Center,
-} from "@react-three/drei";
+import { OrbitControls, useGLTF, Environment, Center } from "@react-three/drei";
 import * as THREE from "three";
-import styles from "./ModelLoader.module.css";
 
 interface ModelProps {
   path: string;
@@ -130,78 +123,38 @@ export function ModelLoader({
   autoRotateSpeed = 0.5,
   materialProps,
 }: ModelLoaderProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // Small delay to ensure proper initialization
-    const timer = setTimeout(() => {
-      setMounted(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!mounted) return null;
-
   return (
-    <div className={styles.container}>
-      <Canvas
-        camera={{
-          position: [0, 0, 10],
-          fov: 50,
-          near: 0.1,
-          far: 1000,
-        }}
-        style={{
-          background: backgroundColor,
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-        gl={{ antialias: true }}
-        dpr={[1, 2]}
-        resize={{ scroll: false }}
-      >
-        <ambientLight intensity={0.2} />
-        <pointLight position={[10, 10, 10]} intensity={0.5} />
+    <Canvas
+      camera={{ position: [0, 0, 10], fov: 50 }}
+      style={{ background: backgroundColor }}
+    >
+      <ambientLight intensity={0.5} />
+      <pointLight position={[10, 10, 10]} intensity={1} />
 
-        <Suspense fallback={null}>
-          <PresentationControls
-            global
-            snap
-            rotation={[0, 0, 0]}
-            polar={[-Math.PI / 3, Math.PI / 3]}
-            azimuth={[-Math.PI / 1.5, Math.PI / 1.5]}
-            speed={1.5}
-            zoom={1}
-          >
-            <Center scale={[1.5, 1.5, 1.5]} position={[0, 0, 0]}>
-              <Model
-                path={modelPath}
-                scale={scale}
-                position={position}
-                rotation={rotation}
-                flipVertical={flipVertical}
-                autoRotate={autoRotate}
-                autoRotateSpeed={autoRotateSpeed}
-                materialProps={materialProps}
-              />
-            </Center>
-          </PresentationControls>
-          <Environment preset={environmentPreset} />
-          {showControls && (
-            <OrbitControls
-              enableZoom={false}
-              enablePan={false}
-              minPolarAngle={0}
-              maxPolarAngle={Math.PI / 1.75}
-              makeDefault
-            />
-          )}
-        </Suspense>
-      </Canvas>
-    </div>
+      <Suspense fallback={null}>
+        <Center>
+          <Model
+            path={modelPath}
+            scale={scale}
+            position={position}
+            rotation={rotation}
+            flipVertical={flipVertical}
+            autoRotate={autoRotate}
+            autoRotateSpeed={autoRotateSpeed}
+            materialProps={materialProps}
+          />
+        </Center>
+        <Environment preset={environmentPreset} />
+        {showControls && (
+          <OrbitControls
+            enableZoom={false}
+            enablePan={false}
+            minPolarAngle={0}
+            maxPolarAngle={Math.PI / 1.75}
+          />
+        )}
+      </Suspense>
+    </Canvas>
   );
 }
 

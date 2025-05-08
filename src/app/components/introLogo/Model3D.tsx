@@ -58,7 +58,10 @@ export function Model3D({
   materialProps,
 }: Model3DProps) {
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div
+      className={`${styles.container} ${className}`}
+      style={{ width: "100%", height: "100%" }}
+    >
       <Suspense fallback={<ModelLoading text={loadingText} />}>
         <ModelLoader
           modelPath={modelPath}
