@@ -126,13 +126,20 @@ export function ModelLoader({
   return (
     <Canvas
       camera={{ position: [0, 0, 10], fov: 50 }}
-      style={{ background: backgroundColor }}
+      style={{
+        background: backgroundColor,
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        top: 0,
+        left: 0,
+      }}
     >
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1} />
 
       <Suspense fallback={null}>
-        <Center>
+        <Center scale={[1.5, 1.5, 1.5]}>
           <Model
             path={modelPath}
             scale={scale}

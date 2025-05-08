@@ -18,7 +18,13 @@ export default function Home() {
       <div className={styles.loaderScreen}>
         <div
           className={styles.modelWrapper}
-          style={{ height: "500px", width: "100%" }}
+          style={{
+            height: "100vh",
+            width: "100vw",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
         >
           <Model3D
             modelPath="/models/walkman2.glb"
