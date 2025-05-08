@@ -133,7 +133,11 @@ export function ModelLoader({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    // Small delay to ensure proper initialization
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   if (!mounted) return null;
@@ -149,6 +153,11 @@ export function ModelLoader({
         }}
         style={{
           background: backgroundColor,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
         }}
         gl={{ antialias: true }}
         dpr={[1, 2]}
@@ -167,7 +176,7 @@ export function ModelLoader({
             speed={1.5}
             zoom={1}
           >
-            <Center scale={[1.5, 1.5, 1.5]}>
+            <Center scale={[1.5, 1.5, 1.5]} position={[0, 0, 0]}>
               <Model
                 path={modelPath}
                 scale={scale}
