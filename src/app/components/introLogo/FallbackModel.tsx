@@ -46,6 +46,9 @@ function Model() {
       scene.position.set(-center.x, -center.y, -center.z);
 
       modelRef.current.add(scene);
+      // Log the matrix to check its values.  This is CRUCIAL for debugging.
+      console.log("Flip Matrix:", flipMatrix);
+      console.log("Model Position after centering:", scene.position);
     }
   }, [scene]);
 
@@ -69,7 +72,7 @@ export default function FallbackModel() {
     <div style={{ width: "100%", height: "100vh", background: "black" }}>
       <Canvas
         camera={{
-          position: [0, 2.5, 5],
+          position: [0, 2, 5],
           fov: 45,
           near: 0.1,
           far: 1000,
