@@ -5,15 +5,12 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
-// Model with proper flipping and centering
 function Model() {
-  const { scene } = useGLTF("/models/walkman2.glb");
+  const { scene } = useGLTF("/models/logo.glb");
   const modelRef = useRef<THREE.Group>(null);
 
-  // Set up the model after loading
   useEffect(() => {
     if (scene && modelRef.current) {
-      // Apply materials
       scene.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           child.material = new THREE.MeshPhysicalMaterial({
@@ -27,11 +24,9 @@ function Model() {
         }
       });
 
-      // Create a rotation matrix for flipping
       const flipMatrix = new THREE.Matrix4();
-      flipMatrix.makeRotationX(Math.PI); // 180 degrees around X axis
+      flipMatrix.makeRotationX(Math.PI);
 
-      // Apply the flip matrix to all mesh geometries
       scene.traverse((child) => {
         if (child instanceof THREE.Mesh && child.geometry) {
           child.geometry.applyMatrix4(flipMatrix);
@@ -39,20 +34,30 @@ function Model() {
         }
       });
 
-      // Center the model
       const boundingBox = new THREE.Box3().setFromObject(scene);
       const center = new THREE.Vector3();
       boundingBox.getCenter(center);
       scene.position.set(-center.x, -center.y, -center.z);
 
       modelRef.current.add(scene);
-      // Log the matrix to check its values.  This is CRUCIAL for debugging.
+
+      const modelGroupBoundingBox = new THREE.Box3().setFromObject(
+        modelRef.current
+      );
+      const modelGroupCenter = new THREE.Vector3();
+      modelGroupBoundingBox.getCenter(modelGroupCenter);
+      modelRef.current.position.y = -modelGroupCenter.y;
+
       console.log("Flip Matrix:", flipMatrix);
-      console.log("Model Position after centering:", scene.position);
+      console.log("Model Position after initial centering:", scene.position);
+      console.log("Model Group Center:", modelGroupCenter);
+      console.log(
+        "Model Group Position after vertical adjustment:",
+        modelRef.current.position
+      );
     }
   }, [scene]);
 
-  // Auto-rotate animation
   useFrame((_, delta) => {
     if (modelRef.current) {
       modelRef.current.rotation.y += delta * 0.5;
@@ -60,9 +65,9 @@ function Model() {
   });
 
   return (
-    <group position={[0, 0, 0]} rotation={[Math.PI, 0, 0]}>
-      {/* The scene is added as a child of this group */}
-      <group ref={modelRef} scale={0.17} position={[0, 0, 0]} />
+    <group ref={modelRef} scale={0.1}>
+      {" "}
+      {/* Changed scale to 0.1 */}{" "}
     </group>
   );
 }
@@ -72,7 +77,7 @@ export default function FallbackModel() {
     <div style={{ width: "100%", height: "100vh", background: "black" }}>
       <Canvas
         camera={{
-          position: [0, 2, 5],
+          position: [0, 0, 3],
           fov: 45,
           near: 0.1,
           far: 1000,
@@ -86,7 +91,7 @@ export default function FallbackModel() {
           <OrbitControls
             enableZoom={false}
             autoRotate={false}
-            target={[0, 2, 0]}
+            target={[0, 0, 0]}
           />
         </Suspense>
       </Canvas>
