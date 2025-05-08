@@ -143,49 +143,19 @@ export function ModelLoader({
       <Canvas
         camera={{
           position: [0, 0, 10],
-          fov: 40,
+          fov: 50,
           near: 0.1,
           far: 1000,
         }}
         style={{
           background: backgroundColor,
-          width: "100%",
-          height: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
         }}
         gl={{ antialias: true }}
+        dpr={[1, 2]}
+        resize={{ scroll: false }}
       >
-        {/* Ambient and key light */}
         <ambientLight intensity={0.2} />
         <pointLight position={[10, 10, 10]} intensity={0.5} />
-
-        {/* Dramatic backlighting for glow effect */}
-        <spotLight
-          position={[-2, 0, -10]}
-          angle={0.4}
-          penumbra={0.8}
-          intensity={3}
-          color="#ff6b00"
-          distance={20}
-        />
-        <spotLight
-          position={[2, 0, -10]}
-          angle={0.4}
-          penumbra={0.8}
-          intensity={3}
-          color="#ff3000"
-          distance={20}
-        />
-        <pointLight
-          position={[0, 0, -8]}
-          intensity={2}
-          color="#ff8c00"
-          distance={12}
-        />
 
         <Suspense fallback={null}>
           <PresentationControls
@@ -197,7 +167,7 @@ export function ModelLoader({
             speed={1.5}
             zoom={1}
           >
-            <Center>
+            <Center scale={[1.5, 1.5, 1.5]}>
               <Model
                 path={modelPath}
                 scale={scale}

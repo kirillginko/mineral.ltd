@@ -80,7 +80,7 @@ export function Footer({ isVisible = true }: FooterProps) {
           <p className={styles.tagline}>
             Ai Powered Music
             <br />
-            Playlists
+            Playlists Creator
           </p>
           <p className={styles.companyInfo}>
             {new Date().getFullYear()} © Mineral.ltd
