@@ -58,10 +58,10 @@ function Model() {
   });
 
   return (
-    <group position={[0, 1.5, 0]} rotation={[Math.PI, 0, 0]}>
+    <group position={[0, 1.7, 0]} rotation={[Math.PI, 0, 0]}>
       {" "}
       {/* Changed position to [0,0,0] */}
-      <group ref={modelRef} scale={0.2} position={[0, 0, 0]}>
+      <group ref={modelRef} scale={0.17} position={[0, 0, 0]}>
         {/* The scene is added as a child of this group */}
       </group>
     </group>
