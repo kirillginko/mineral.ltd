@@ -23,7 +23,7 @@ export default function Home() {
         <Model3D
           modelPath="/models/walkman2.glb"
           environmentPreset="sunset"
-          scale={0.25}
+          scale={0.3}
           position={[0, 0, 0]}
           rotation={[0, Math.PI / 4, 0]}
           showControls={true}
