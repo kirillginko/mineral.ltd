@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  margin-top: -4rem; /* Offset the padding-top from main content */
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.visible {
+  opacity: 1;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+/* Style for Matter.js canvas */
+.container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

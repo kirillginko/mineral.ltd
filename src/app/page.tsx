@@ -1,22 +1,36 @@
+"use client";
+
+import { useState } from "react";
 import { Model3D } from "./components/introLogo/Model3D";
 import styles from "./styles/page.module.css";
+import { Navbar } from "./components/navbar/Navbar";
+import { GenrePills } from "./components/GenrePills/GenrePills";
 
 export default function Home() {
+  const [isLoaderVisible, setIsLoaderVisible] = useState(true);
+
+  const handleTitleClick = () => {
+    setIsLoaderVisible(false);
+  };
+
   return (
     <main className={styles.main}>
-      <h2 className={styles.title}>Mineral.ltd</h2>
-      <div className={styles.modelContainer}>
+      <div
+        className={`${styles.modelContainer} ${
+          !isLoaderVisible ? styles.hidden : ""
+        }`}
+      >
         <Model3D
           modelPath="/models/walkman2.glb"
           environmentPreset="sunset"
-          scale={0.2}
+          scale={0.25}
           position={[0, 0, 0]}
           rotation={[0, Math.PI / 4, 0]}
           showControls={true}
           backgroundColor="transparent"
           flipVertical={true}
           autoRotate={true}
-          autoRotateSpeed={0.3}
+          autoRotateSpeed={0.5}
           materialProps={{
             color: "#ff6b00",
             metalness: 0.8,
@@ -30,6 +44,25 @@ export default function Home() {
             emissiveIntensity: 0.5,
           }}
         />
+        <button
+          onClick={handleTitleClick}
+          className={`${styles.title} ${!isLoaderVisible ? styles.hidden : ""}`}
+        >
+          Mineral.ltd
+        </button>
+      </div>
+
+      <Navbar isVisible={!isLoaderVisible} />
+
+      <div
+        className={`${styles.mainContent} ${
+          !isLoaderVisible ? styles.visible : styles.hidden
+        }`}
+      >
+        {/* <GenrePills
+          className={styles.genrePills}
+          isVisible={!isLoaderVisible}
+        /> */}
       </div>
     </main>
   );
