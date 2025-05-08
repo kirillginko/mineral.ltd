@@ -141,15 +141,22 @@ export function ModelLoader({
 }: ModelLoaderProps) {
   return (
     <Canvas
-      gl={{ antialias: true }}
       camera={{ position: [0, 0, 10], fov: 50 }}
-      style={{ background: backgroundColor }}
+      style={{
+        position: "fixed",
+        width: "100vw",
+        height: "100vh",
+        left: 0,
+        top: 0,
+        background: backgroundColor,
+        zIndex: 101,
+      }}
     >
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
+      <ambientLight intensity={1.0} />
+      <pointLight position={[10, 10, 10]} intensity={2} />
 
       <Suspense fallback={<Loader />}>
-        <Center>
+        <Center scale={[2, 2, 2]}>
           <Model
             path={modelPath}
             scale={scale}
