@@ -1,9 +1,21 @@
 "use client";
 
 import { Suspense, useEffect, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Environment, Center } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import {
+  OrbitControls,
+  useGLTF,
+  Environment,
+  Center,
+  Html,
+  useProgress,
+} from "@react-three/drei";
 import * as THREE from "three";
+
+function Loader() {
+  const { progress } = useProgress();
+  return <Html center>{progress} % loaded</Html>;
+}
 
 interface ModelProps {
   path: string;
@@ -25,6 +37,23 @@ interface ModelProps {
     emissiveColor?: string;
     emissiveIntensity?: number;
   };
+}
+
+interface ModelLoaderProps extends Omit<ModelProps, "path"> {
+  modelPath?: string;
+  backgroundColor?: string;
+  showControls?: boolean;
+  environmentPreset?:
+    | "sunset"
+    | "dawn"
+    | "night"
+    | "warehouse"
+    | "forest"
+    | "apartment"
+    | "studio"
+    | "city"
+    | "park"
+    | "lobby";
 }
 
 function Model({
@@ -51,14 +80,12 @@ function Model({
   const { scene } = useGLTF(path);
   const modelRef = useRef<THREE.Group>(null);
 
-  // Apply vertical flip if needed
   useEffect(() => {
     if (flipVertical && modelRef.current) {
       modelRef.current.scale.y = -Math.abs(modelRef.current.scale.y);
     }
 
-    // Apply material to all meshes in the scene
-    scene.traverse((child) => {
+    scene.traverse((child: THREE.Object3D) => {
       if (child instanceof THREE.Mesh) {
         const material = new THREE.MeshPhysicalMaterial({
           ...materialProps,
@@ -71,14 +98,20 @@ function Model({
         child.receiveShadow = true;
       }
     });
-  }, [flipVertical, scene, materialProps]);
 
-  // Auto-rotate logic
-  useFrame((_, delta) => {
-    if (autoRotate && modelRef.current) {
-      modelRef.current.rotation.y += delta * autoRotateSpeed;
-    }
-  });
+    // Auto-rotation setup
+    const intervalId = autoRotate
+      ? setInterval(() => {
+          if (modelRef.current) {
+            modelRef.current.rotation.y += 0.01 * autoRotateSpeed;
+          }
+        }, 16)
+      : null;
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [flipVertical, scene, materialProps, autoRotate, autoRotateSpeed]);
 
   return (
     <primitive
@@ -91,23 +124,6 @@ function Model({
       receiveShadow
     />
   );
-}
-
-interface ModelLoaderProps extends Omit<ModelProps, "path"> {
-  modelPath?: string;
-  backgroundColor?: string;
-  showControls?: boolean;
-  environmentPreset?:
-    | "sunset"
-    | "dawn"
-    | "night"
-    | "warehouse"
-    | "forest"
-    | "apartment"
-    | "studio"
-    | "city"
-    | "park"
-    | "lobby";
 }
 
 export function ModelLoader({
@@ -125,21 +141,15 @@ export function ModelLoader({
 }: ModelLoaderProps) {
   return (
     <Canvas
+      gl={{ antialias: true }}
       camera={{ position: [0, 0, 10], fov: 50 }}
-      style={{
-        background: backgroundColor,
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0,
-      }}
+      style={{ background: backgroundColor }}
     >
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1} />
 
-      <Suspense fallback={null}>
-        <Center scale={[1.5, 1.5, 1.5]}>
+      <Suspense fallback={<Loader />}>
+        <Center>
           <Model
             path={modelPath}
             scale={scale}

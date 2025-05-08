@@ -29,6 +29,41 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.loadingScreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  color: white;
+  font-size: 1.5rem;
+  z-index: 200;
+}
+
+.loadingSpinner {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .title {

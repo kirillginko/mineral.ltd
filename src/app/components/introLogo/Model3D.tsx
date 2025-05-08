@@ -1,8 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
 import { ModelLoader } from "./ModelLoader";
-import { ModelLoading } from "./ModelLoading";
 import styles from "./Model3D.module.css";
 
 interface Model3DProps {
@@ -23,7 +21,6 @@ interface Model3DProps {
   scale?: number;
   position?: [number, number, number];
   rotation?: [number, number, number];
-  loadingText?: string;
   className?: string;
   flipVertical?: boolean;
   autoRotate?: boolean;
@@ -50,7 +47,6 @@ export function Model3D({
   scale = 1,
   position = [0, 0, 0],
   rotation = [0, 0, 0],
-  loadingText = "Loading 3D model...",
   className = "",
   flipVertical = false,
   autoRotate = false,
@@ -58,25 +54,20 @@ export function Model3D({
   materialProps,
 }: Model3DProps) {
   return (
-    <div
-      className={`${styles.container} ${className}`}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <Suspense fallback={<ModelLoading text={loadingText} />}>
-        <ModelLoader
-          modelPath={modelPath}
-          backgroundColor={backgroundColor}
-          showControls={showControls}
-          environmentPreset={environmentPreset}
-          scale={scale}
-          position={position}
-          rotation={rotation}
-          flipVertical={flipVertical}
-          autoRotate={autoRotate}
-          autoRotateSpeed={autoRotateSpeed}
-          materialProps={materialProps}
-        />
-      </Suspense>
+    <div className={`${styles.container} ${className}`}>
+      <ModelLoader
+        modelPath={modelPath}
+        backgroundColor={backgroundColor}
+        showControls={showControls}
+        environmentPreset={environmentPreset}
+        scale={scale}
+        position={position}
+        rotation={rotation}
+        flipVertical={flipVertical}
+        autoRotate={autoRotate}
+        autoRotateSpeed={autoRotateSpeed}
+        materialProps={materialProps}
+      />
     </div>
   );
 }
