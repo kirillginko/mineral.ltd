@@ -11,7 +11,7 @@
 }
 
 .modelContainer {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -21,7 +21,7 @@
   align-items: center;
   flex-direction: column;
   transition: opacity 0.5s ease-in-out;
-  background-color: #000;
+  background-color: transparent;
   opacity: 1;
   visibility: visible;
   z-index: 50;
