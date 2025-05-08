@@ -1,11 +1,12 @@
 .main {
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 0;
-  overflow: hidden;
   position: relative;
   background-color: #2d9b4c;
+  display: flex;
+  flex-direction: column;
 }
 
 .modelContainer {
@@ -54,10 +55,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: #2d9b4c;
   color: #fff;
   padding-top: 4rem;
+}
+
+.footerWrapper {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
 }
 
 .visible {

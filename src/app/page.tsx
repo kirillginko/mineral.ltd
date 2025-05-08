@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Model3D } from "./components/introLogo/Model3D";
 import styles from "./styles/page.module.css";
 import { Navbar } from "./components/navbar/Navbar";
-import { GenrePills } from "./components/GenrePills/GenrePills";
+import { Footer } from "./components/footer/Footer";
 
 export default function Home() {
   const [isLoaderVisible, setIsLoaderVisible] = useState(true);
@@ -63,6 +63,14 @@ export default function Home() {
           className={styles.genrePills}
           isVisible={!isLoaderVisible}
         /> */}
+      </div>
+
+      <div
+        className={`${styles.footerWrapper} ${
+          !isLoaderVisible ? styles.visible : styles.hidden
+        }`}
+      >
+        <Footer isVisible={true} />
       </div>
     </main>
   );
