@@ -24,16 +24,6 @@ function Model() {
         }
       });
 
-      const flipMatrix = new THREE.Matrix4();
-      flipMatrix.makeRotationX(Math.PI);
-
-      scene.traverse((child) => {
-        if (child instanceof THREE.Mesh && child.geometry) {
-          child.geometry.applyMatrix4(flipMatrix);
-          child.geometry.computeVertexNormals();
-        }
-      });
-
       const boundingBox = new THREE.Box3().setFromObject(scene);
       const center = new THREE.Vector3();
       boundingBox.getCenter(center);
@@ -48,7 +38,6 @@ function Model() {
       modelGroupBoundingBox.getCenter(modelGroupCenter);
       modelRef.current.position.y = -modelGroupCenter.y;
 
-      console.log("Flip Matrix:", flipMatrix);
       console.log("Model Position after initial centering:", scene.position);
       console.log("Model Group Center:", modelGroupCenter);
       console.log(
